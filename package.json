@@ -1,28 +1,27 @@
 {
-  "name": "gulp-po-json",
-  "version": "0.0.4",
-  "description": "Utility to convert PO files to JSON files with Gulp",
+  "name": "gulp-po-requirejs-i18n",
+  "version": "0.1.0",
+  "description": "Utility to convert PO files to requirejs-i18n files with Gulp",
   "main": "index.js",
-  "scripts": {
-    "test": "mocha"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ulflander/gulp-po-json.git"
+    "url": "https://github.com/sinedied/gulp-po-requirejs-i18n.git"
   },
-  "author": "Ulflander",
+  "author": "sinedied",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Ulflander/gulp-po-json/issues"
+    "url": "https://github.com/sinedied/gulp-po-requirejs-i18n/issues"
   },
-  "homepage": "https://github.com/Ulflander/gulp-po-json",
+  "homepage": "https://github.com/sinedied/gulp-po-requirejs-i18n.git",
   "dependencies": {
-    "node-po": "^0.1.2",
+    "extend": "^3.0.0",
     "gulp-util": "^3.0.0",
+    "node-po": "^0.1.2",
     "through2": "^0.6.1"
   },
   "devDependencies": {
     "event-stream": "^3.1.7",
+    "gulp": "^3.9.0",
     "mocha": "^1.21.4",
     "should": "^4.0.4",
     "vinyl": "^0.3.2"

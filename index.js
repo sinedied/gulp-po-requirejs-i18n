@@ -1,52 +1,85 @@
-
-
 var through = require('through2'),
-    gutil = require('gulp-util'),
-    po = require('node-po'),
-    PluginError = gutil.PluginError;
+  gutil = require('gulp-util'),
+  po = require('node-po'),
+  extend = require('extend'),
+  path = require('path'),
+  PluginError = gutil.PluginError;
 
-module.exports = function () {
+function error(error, cb) {
+  this.emit('error', new PluginError('gulp-po-requirejs-i18n', error));
+  return cb();
+}
 
-    function write (f, enc, cb){
-        if (f.isNull()) {
-            this.push(f);
-            return cb();
-        }
+function escapeQuotes(str) {
+  return str.replace(/'/g, '\\\'');
+}
 
-        if (f.isStream()) {
-            this.emit('error', new PluginError('gulp-po-json', 
-                'Streaming not supported'));
-            return cb();
-        }
+module.exports = function(options) {
 
-        var pofile = po.parse(f.contents.toString('utf-8')),
-            res = {},
-            dic = {},
-            i,
-            l;
+  options = extend({
+    name: 'strings',
+    root: false,
+    supported: []
+  }, options);
 
-        if (!pofile) {
-            this.emit('error', new PluginError('gulp-po-json', 
-                'Unable to parse file ' + f.path));
-            return cb();
-        }
+  function write(f, enc, cb) {
 
-        res.meta = pofile.headers;
-        res.dic = dic;
-
-        for (i = 0, l = pofile.items.length; i < l; i += 1) {
-            res.dic[pofile.items[i].msgid] = pofile.items[i].msgstr[0];
-        }
-
-        f.path = f.path.replace(/\.po$/gi, '.json');
-        f.contents = new Buffer(JSON.stringify(res));
-        this.push(f);
-        cb();
+    if (f.isNull()) {
+      this.push(f);
+      return cb();
     }
 
-    function end (cb) {
-        cb();
+    if (f.isStream()) {
+      error('Streaming not supported', cb);
     }
 
-    return through.obj(write, end);
+    var poData = po.parse(f.contents.toString('utf-8'));
+    var res = 'define({\n';
+    var indent = options.root ? '    ' : '  ';
+    var prefix = options.root ? 't_' : '';
+
+    if (!poData) {
+      error('Unable to parse file ' + f.path, cb);
+    }
+
+    if (options.root) {
+      res += '  root: {\n';
+    }
+
+    poData.items.forEach(function(item, index) {
+      res += indent + '\'' + escapeQuotes(item.msgid) + '\': \'' + escapeQuotes(prefix + item.msgstr[0]) + '\'';
+      res += (index !== poData.items.length - 1 ? ',' : '') + '\n';
+    });
+
+    if (options.root) {
+      res += '  }';
+
+      if (options.supported.length) {
+        res += ',\n';
+
+        options.supported.forEach(function(language, index) {
+          res += '  \'' + language + '\': true' + (index !== options.supported.length - 1 ? ',' : '') + '\n';
+        });
+      } else {
+        res += '\n';
+      }
+
+      f.path = path.join(path.dirname(f.path), options.name + '.js');
+    } else {
+      f.path = path.join(path.dirname(f.path), path.basename(f.path, '.po'), options.name + '.js');
+    }
+
+    res += '});\n';
+    f.contents = new Buffer(res);
+
+    this.push(f);
+    cb();
+  }
+
+  function end(cb) {
+    cb();
+  }
+
+  return through.obj(write, end);
+
 };
