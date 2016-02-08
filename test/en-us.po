@@ -9,3 +9,6 @@ msgstr "Testing"
 
 msgid "Copy"
 msgstr "© Copyright"
+
+msgid "BugFix"
+msgstr "Checking \"escaped\" quotes"

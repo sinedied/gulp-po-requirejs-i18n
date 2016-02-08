@@ -19,6 +19,7 @@ module.exports = function(options) {
   options = extend({
     name: 'strings',
     root: false,
+    rootPrefix: 't_',
     supported: []
   }, options);
 
@@ -36,7 +37,7 @@ module.exports = function(options) {
     var poData = po.parse(f.contents.toString('utf-8'));
     var res = 'define({\n';
     var indent = options.root ? '    ' : '  ';
-    var prefix = options.root ? 't_' : '';
+    var prefix = options.root ? options.rootPrefix : '';
 
     if (!poData) {
       error('Unable to parse file ' + f.path, cb);

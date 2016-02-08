@@ -9,3 +9,6 @@ msgstr "En test"
 
 msgid "Copy"
 msgstr "© Copyright"
+
+msgid "BugFix"
+msgstr "Vérification des guillemets \"échappés\""

@@ -20,7 +20,9 @@ gulp.task('i18n', function() {
 
 - `name`: (default: `'strings'`) The name prefix for converted files.
 
-- `root`: (default: `false`) If true, put translations in a `root` key, and add `t_` prefix to translations
-  values.
+- `root`: (default: `false`) If true, put translations in a `root` key, and add prefix to translations
+  values (`t_` by default).
+
+- `rootPrefix`: (default: `t_`) A prefix that will be added to translations values in root mode.
 
 - `supported`: (default: `[]`) Output keys for supported languages, only if `root` is enabled.
