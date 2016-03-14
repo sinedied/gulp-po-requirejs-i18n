@@ -26,3 +26,5 @@ gulp.task('i18n', function() {
 - `rootPrefix`: (default: `t_`) A prefix that will be added to translations values in root mode.
 
 - `supported`: (default: `[]`) Output keys for supported languages, only if `root` is enabled.
+
+- `omitEmptyString`: (default: `true`) Do not output keys for PO translations with an empty string.

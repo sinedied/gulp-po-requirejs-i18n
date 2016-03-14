@@ -12,3 +12,6 @@ msgstr "© Copyright"
 
 msgid "BugFix"
 msgstr "Checking \"escaped\" quotes"
+
+msgid "NotTranslated"
+msgstr "Not translated"

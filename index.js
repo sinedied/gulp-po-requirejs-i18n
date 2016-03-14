@@ -20,7 +20,8 @@ module.exports = function(options) {
     name: 'strings',
     root: false,
     rootPrefix: 't_',
-    supported: []
+    supported: [],
+    omitEmptyStrings: true
   }, options);
 
   function write(f, enc, cb) {
@@ -45,6 +46,12 @@ module.exports = function(options) {
 
     if (options.root) {
       res += '  root: {\n';
+    }
+
+    if (options.omitEmptyStrings) {
+      poData.items = poData.items.filter(function(item) {
+        return item.msgstr[0] !== '';
+      });
     }
 
     poData.items.forEach(function(item, index) {
